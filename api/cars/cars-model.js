@@ -12,13 +12,20 @@ const getById = (id) => {
     .first()
 }
 
+const getByVin = (vin) => {
+  return db('cars')
+    .where('vin',vin)
+    .first()
+} 
+
 const create =  async (car) => {
-  const [id] = await db('cars').insert(car)
-  return getById(id)
+  return db('cars').insert(car)
+    .then(([id]) => getById(id))
 }
 
 module.exports = {
   getAll, 
   getById,
    create,
+   getByVin,
   }

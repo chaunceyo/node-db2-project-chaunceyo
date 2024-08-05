@@ -12,13 +12,23 @@ router.get('/', (req, res) => {
     .then(cars => {
         res.json(cars)
     })
+    .catch(err => {
+        next(err)
+    })
 })
 
 router.get('/:id', checkCarId, (req, res) => {
    res.json(req.car)
 })
 
-router.post('/', (req, res) => {
-    //finish middlewares and add before finishing router
+router.post('/', checkCarPayload, checkVinNumberValid, checkVinNumberUnique, async (req, res) => {
+    try{
+        const car = await Car.create(req.body)
+        res.json(car)
+    }catch(err){
+        next(err)
+    }
 })
+
+
 module.exports = router
